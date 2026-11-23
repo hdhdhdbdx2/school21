@@ -1,0 +1,2 @@
+{"time": "2026-11-23T09:37:53.799935+00:00", "tool": "get_product", "arguments": {"product_id": "hoodie"}, "result": {"ok": true, "data": {"id": "hoodie", "name": "Худи", "price_coins": 500, "user_limit": 1, "stock": {"L": 2, "M": 5, "S": 3, "XL": 1}}}}
+{"time": "2026-11-23T09:37:53.802905+00:00", "tool": "get_product", "arguments": {"product_id": "missing"}, "result": {"ok": false, "error": {"code": "PRODUCT_NOT_FOUND", "message": "Товар не найден"}}}
