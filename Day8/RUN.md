@@ -1,6 +1,8 @@
 # Запуск Лавки
 
-Профиль правил: base
+Профиль правил: E3
+
+При отмене возвращается 90% сохранённой стоимости с округлением вниз. Товар возвращается полностью.
 
 Все команды выполняются из папки с `RUN.md`.
 
@@ -41,7 +43,7 @@ python3 -m src.server
 
 ~~~bash
 python3 -m pytest -q
-python3 checks/acceptance.py --project . --profile base
+python3 checks/acceptance.py --project . --profile E3
 ~~~
 
 ## Состояние

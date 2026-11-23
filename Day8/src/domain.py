@@ -17,7 +17,7 @@ def purchase_error(product, size, quantity, balance, already_owned, total):
 
 def refund_amount(total_price):
     'Сумма возврата по сохранённой стоимости заказа.'
-    return total_price
+    return total_price * 9 // 10
 
 def can_cancel(order):
     'Можно ли отменить найденный заказ.'

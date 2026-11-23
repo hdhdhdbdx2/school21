@@ -56,7 +56,7 @@ def test_cancel_refunds_original_price_once(storage):
 
     cancelled = cancel_order(storage, order_id)
     assert cancelled["data"] == {"order_id": order_id, "status": "cancelled"}
-    assert storage.get_user("student_01")["coins"] == 1000
+    assert storage.get_user("student_01")["coins"] == 985
     assert storage.get_product("bottle")["stock"]["one_size"] == 12
     assert storage.count_owned("student_01", "bottle") == 0
 
@@ -79,3 +79,10 @@ def test_pickup_updates_only_status(storage):
     assert confirm_pickup(storage, order_id)["error"]["code"] == "ORDER_STATUS_ERROR"
     assert cancel_order(storage, order_id)["error"]["code"] == "ORDER_STATUS_ERROR"
     assert snapshot(storage) == after_pickup
+
+
+def test_refund_rounds_saved_price_down():
+    from src.domain import refund_amount
+
+    assert refund_amount(150) == 135
+    assert refund_amount(151) == 135
