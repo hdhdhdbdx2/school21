@@ -96,11 +96,29 @@ class Storage:
 
     def cancel_order(self, order, refund):
         'Вернуть переданную сумму и товар, поменять статус одной транзакцией.'
-        # TODO: закончите эту функцию.
-        raise NotImplementedError("cancel_order")
+        with self.transaction():
+            changed = self.connection.execute(
+                "UPDATE orders SET status = 'cancelled' WHERE id = ? AND status = 'created'",
+                (order["id"],),
+            )
+            if changed.rowcount == 0:
+                return None
+            self.connection.execute(
+                "UPDATE users SET coins = coins + ? WHERE id = ?",
+                (refund, order["user_id"]),
+            )
+            self.connection.execute(
+                "UPDATE stock SET quantity = quantity + ? WHERE product_id = ? AND size = ?",
+                (order["quantity"], order["product_id"], order["size"]),
+            )
+            return self.get_order(order["id"])
 
     def confirm_pickup(self, order_id):
         'Изменить только статус. Баланс и остаток уже уменьшены при покупке.'
-        # TODO: закончите эту функцию.
-        raise NotImplementedError("confirm_pickup")
+        with self.transaction():
+            changed = self.connection.execute(
+                "UPDATE orders SET status = 'picked_up' WHERE id = ? AND status = 'created'",
+                (order_id,),
+            )
+            return self.get_order(order_id) if changed.rowcount else None
 

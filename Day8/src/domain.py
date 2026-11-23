@@ -17,16 +17,13 @@ def purchase_error(product, size, quantity, balance, already_owned, total):
 
 def refund_amount(total_price):
     'Сумма возврата по сохранённой стоимости заказа.'
-    # TODO: закончите эту функцию.
-    raise NotImplementedError("refund_amount")
+    return total_price
 
 def can_cancel(order):
     'Можно ли отменить найденный заказ.'
-    # TODO: закончите эту функцию.
-    raise NotImplementedError("can_cancel")
+    return order["status"] == "created"
 
 def can_pickup(order):
     'Можно ли выдать найденный заказ.'
-    # TODO: закончите эту функцию.
-    raise NotImplementedError("can_pickup")
+    return order["status"] == "created"
 

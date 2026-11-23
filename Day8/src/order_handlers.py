@@ -31,12 +31,22 @@ def create_order(storage, user_id, product_id, size, quantity):
         })
 
 def cancel_order(storage, order_id):
-    'Реализуйте по правилам Лавки и согласованным методам.'
-    # TODO: закончите эту функцию.
-    raise NotImplementedError("cancel_order")
+    with storage.transaction():
+        order = storage.get_order(order_id)
+        if order is None:
+            return failure("ORDER_NOT_FOUND", "Заказ не найден")
+        if not domain.can_cancel(order):
+            return failure("ORDER_STATUS_ERROR", "Этот заказ нельзя отменить")
+        cancelled = storage.cancel_order(order, domain.refund_amount(order["total_price"]))
+        return success({"order_id": cancelled["id"], "status": cancelled["status"]})
 
 def confirm_pickup(storage, order_id):
-    'Реализуйте по правилам Лавки и согласованным методам.'
-    # TODO: закончите эту функцию.
-    raise NotImplementedError("confirm_pickup")
+    with storage.transaction():
+        order = storage.get_order(order_id)
+        if order is None:
+            return failure("ORDER_NOT_FOUND", "Заказ не найден")
+        if not domain.can_pickup(order):
+            return failure("ORDER_STATUS_ERROR", "Этот заказ нельзя выдать")
+        picked_up = storage.confirm_pickup(order_id)
+        return success({"order_id": picked_up["id"], "status": picked_up["status"]})
 
