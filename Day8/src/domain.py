@@ -2,7 +2,8 @@
 
 def calculate_total(price, quantity):
     'Стоимость заказа.'
-    return price * quantity
+    total = price * quantity
+    return total * 9 // 10 if quantity >= 3 else total
 
 def purchase_error(product, size, quantity, balance, already_owned, total):
     'Код отказа или None. Пользователь и товар уже найдены.'

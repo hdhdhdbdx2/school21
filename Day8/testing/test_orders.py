@@ -79,3 +79,14 @@ def test_pickup_updates_only_status(storage):
     assert confirm_pickup(storage, order_id)["error"]["code"] == "ORDER_STATUS_ERROR"
     assert cancel_order(storage, order_id)["error"]["code"] == "ORDER_STATUS_ERROR"
     assert snapshot(storage) == after_pickup
+
+
+def test_bulk_discount_is_saved_and_refunded(storage):
+    assert calculate_total(51, 2) == 102
+    with storage.connection:
+        storage.connection.execute("UPDATE products SET price_coins = 51 WHERE id = 'stickers'")
+    order = create_order(storage, "student_01", "stickers", "one_size", 3)["data"]
+    assert order["total_price"] == 137
+    assert storage.get_user("student_01")["coins"] == 863
+    assert cancel_order(storage, order["order_id"])["data"]["status"] == "cancelled"
+    assert storage.get_user("student_01")["coins"] == 1000
