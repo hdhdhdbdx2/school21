@@ -21,7 +21,7 @@ def refund_amount(total_price):
 
 def can_cancel(order):
     'Можно ли отменить найденный заказ.'
-    return order["status"] == "created"
+    return order["status"] == "created" and order["product_id"] != "hoodie"
 
 def can_pickup(order):
     'Можно ли выдать найденный заказ.'

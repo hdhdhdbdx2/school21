@@ -79,3 +79,18 @@ def test_pickup_updates_only_status(storage):
     assert confirm_pickup(storage, order_id)["error"]["code"] == "ORDER_STATUS_ERROR"
     assert cancel_order(storage, order_id)["error"]["code"] == "ORDER_STATUS_ERROR"
     assert snapshot(storage) == after_pickup
+
+
+def test_hoodie_cannot_be_cancelled(storage):
+    order_id = create_order(storage, "student_01", "hoodie", "M", 1)["data"]["order_id"]
+    before = snapshot(storage)
+    assert cancel_order(storage, order_id)["error"]["code"] == "ORDER_STATUS_ERROR"
+    assert snapshot(storage) == before
+    assert confirm_pickup(storage, order_id)["data"]["status"] == "picked_up"
+
+
+def test_bottle_can_still_be_cancelled(storage):
+    order_id = create_order(storage, "student_01", "bottle", "one_size", 1)["data"]["order_id"]
+    assert cancel_order(storage, order_id)["data"]["status"] == "cancelled"
+    assert storage.get_user("student_01")["coins"] == 1000
+    assert storage.get_product("bottle")["stock"]["one_size"] == 12

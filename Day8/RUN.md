@@ -1,6 +1,8 @@
 # Запуск Лавки
 
-Профиль правил: base
+Профиль правил: E5
+
+Созданный заказ худи можно выдать. Попытка его отменить возвращает `ORDER_STATUS_ERROR`.
 
 Все команды выполняются из папки с `RUN.md`.
 
@@ -41,7 +43,7 @@ python3 -m src.server
 
 ~~~bash
 python3 -m pytest -q
-python3 checks/acceptance.py --project . --profile base
+python3 checks/acceptance.py --project . --profile E5
 ~~~
 
 ## Состояние
