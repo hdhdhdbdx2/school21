@@ -12,7 +12,7 @@
 
 ## Путь запроса
 
-Клиент → имя инструмента → функция обработчика → правило, если нужно → метод хранения → ответ.
+`client.py` → `mcp_adapter.get_product` → `read_handlers.get_product` → `Storage.get_product` → `SELECT` из `products` и `stock` → `success(product)` или `failure("PRODUCT_NOT_FOUND", "Товар не найден")`.
 
 ## Проверка отказа
 
