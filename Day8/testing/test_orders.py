@@ -79,3 +79,16 @@ def test_pickup_updates_only_status(storage):
     assert confirm_pickup(storage, order_id)["error"]["code"] == "ORDER_STATUS_ERROR"
     assert cancel_order(storage, order_id)["error"]["code"] == "ORDER_STATUS_ERROR"
     assert snapshot(storage) == after_pickup
+
+
+def test_order_cap_is_separate_from_owned_limit(storage):
+    before = snapshot(storage)
+    declined = create_order(storage, "student_01", "stickers", "one_size", 3)
+    assert declined["error"]["code"] == "USER_LIMIT_EXCEEDED"
+    assert snapshot(storage) == before
+
+    for quantity in (2, 2, 1):
+        order = create_order(storage, "student_01", "stickers", "one_size", quantity)
+        assert order["data"]["total_price"] == 50 * quantity
+    assert storage.count_owned("student_01", "stickers") == 5
+    assert create_order(storage, "student_01", "stickers", "one_size", 1)["error"]["code"] == "USER_LIMIT_EXCEEDED"

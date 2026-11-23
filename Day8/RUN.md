@@ -1,6 +1,8 @@
 # Запуск Лавки
 
-Профиль правил: base
+Профиль правил: E2
+
+В одном заказе разрешено не больше двух единиц. Персональный лимит на общее количество сохраняется.
 
 Все команды выполняются из папки с `RUN.md`.
 
@@ -41,7 +43,7 @@ python3 -m src.server
 
 ~~~bash
 python3 -m pytest -q
-python3 checks/acceptance.py --project . --profile base
+python3 checks/acceptance.py --project . --profile E2
 ~~~
 
 ## Состояние

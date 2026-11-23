@@ -9,7 +9,7 @@ def purchase_error(product, size, quantity, balance, already_owned, total):
     stock = product["stock"]
     if size not in stock or stock[size] < quantity:
         return "OUT_OF_STOCK"
-    if already_owned + quantity > product["user_limit"]:
+    if quantity > 2 or already_owned + quantity > product["user_limit"]:
         return "USER_LIMIT_EXCEEDED"
     if balance < total:
         return "INSUFFICIENT_COINS"
