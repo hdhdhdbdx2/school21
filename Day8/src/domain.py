@@ -11,7 +11,7 @@ def purchase_error(product, size, quantity, balance, already_owned, total):
         return "OUT_OF_STOCK"
     if already_owned + quantity > product["user_limit"]:
         return "USER_LIMIT_EXCEEDED"
-    if balance < total:
+    if balance - total < 50:
         return "INSUFFICIENT_COINS"
     return None
 

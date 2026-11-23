@@ -79,3 +79,18 @@ def test_pickup_updates_only_status(storage):
     assert confirm_pickup(storage, order_id)["error"]["code"] == "ORDER_STATUS_ERROR"
     assert cancel_order(storage, order_id)["error"]["code"] == "ORDER_STATUS_ERROR"
     assert snapshot(storage) == after_pickup
+
+
+def test_reserve_threshold(storage):
+    with storage.connection:
+        storage.connection.execute("UPDATE users SET coins = 180 WHERE id = 'student_01'")
+    before = snapshot(storage)
+    declined = create_order(storage, "student_01", "bottle", "one_size", 1)
+    assert declined["error"]["code"] == "INSUFFICIENT_COINS"
+    assert snapshot(storage) == before
+
+    with storage.connection:
+        storage.connection.execute("UPDATE users SET coins = 200 WHERE id = 'student_01'")
+    ordered = create_order(storage, "student_01", "bottle", "one_size", 1)
+    assert ordered["data"]["total_price"] == 150
+    assert storage.get_user("student_01")["coins"] == 50
