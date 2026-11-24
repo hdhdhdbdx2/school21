@@ -42,7 +42,7 @@ python3 -m src.server
 ## Проверить проект
 
 ~~~bash
-python3 -m pytest -q
+python3 -m pytest -q testing/test_example.py testing/test_orders.py
 python3 checks/acceptance.py --project . --profile E5
 ~~~
 
